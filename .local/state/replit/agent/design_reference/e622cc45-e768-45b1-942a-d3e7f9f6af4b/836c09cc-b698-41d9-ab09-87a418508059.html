@@ -1,0 +1,601 @@
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMR React Application - Hệ Thống Bệnh Án Điện Tử</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.2s ease-in-out',
+                    'slide-in': 'slideIn 0.3s ease-out',
+                    'scale-in': 'scaleIn 0.2s ease-out',
+                }
+            }
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(221.2 83.2% 53.3%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(142.1 76.2% 36.3%);
+            --accent-foreground: hsl(355.7 100% 97.3%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221.2 83.2% 53.3%);
+            --radius: 0.75rem;
+        }
+
+        * {
+            border-color: hsl(var(--border));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 53.3%) 0%, hsl(221.2 83.2% 45%) 100%);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 45%) 0%, hsl(221.2 83.2% 40%) 100%);
+            transform: translateY(-1px);
+        }
+
+        .medical-icon {
+            background: linear-gradient(135deg, hsl(142.1 76.2% 36.3%) 0%, hsl(142.1 76.2% 30%) 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        .status-new { background: hsl(142.1 76.2% 95%); color: hsl(142.1 76.2% 36.3%); }
+        .status-processing { background: hsl(47 96% 95%); color: hsl(47 96% 53%); }
+        .status-completed { background: hsl(221.2 83.2% 95%); color: hsl(221.2 83.2% 53.3%); }
+
+        /* React Component Structure Comments */
+        .react-component-boundary {
+            position: relative;
+        }
+
+        .react-component-boundary::before {
+            content: attr(data-component);
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 0 0 4px 0;
+            font-family: monospace;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .react-component-boundary:hover::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="h-full overflow-hidden">
+    <!-- @COMPONENT: App -->
+    <div class="h-full flex bg-gradient-to-br from-slate-50 to-slate-100 react-component-boundary" data-component="App">
+        
+        <!-- @COMPONENT: Sidebar -->
+        <div class="w-72 bg-white shadow-2xl border-r border-slate-200 flex flex-col react-component-boundary" data-component="Sidebar" data-mock="true">
+            <!-- @COMPONENT: SidebarHeader -->
+            <div class="p-6 border-b border-slate-200 react-component-boundary" data-component="SidebarHeader">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-md text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900" data-bind="appName">EMR</h3>
+                        <p class="text-sm text-slate-600" data-bind="departmentName">Phòng công nghệ thông tin</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- @COMPONENT: SidebarNavigation -->
+            <nav class="flex-1 p-4 space-y-2 react-component-boundary" data-component="SidebarNavigation">
+                <!-- @MAP: navigationItems.map(item => ( -->
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600" data-event="click:handleNavigation" data-mock="true">
+                    <i class="fas fa-certificate w-5 text-center"></i>
+                    <span class="font-medium">Chứng thư số</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600" data-event="click:handleNavigation" data-mock="true">
+                    <i class="fas fa-print w-5 text-center"></i>
+                    <span class="font-medium">In tập tin dữ liệu</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600" data-event="click:handleNavigation" data-mock="true">
+                    <i class="fas fa-cog w-5 text-center"></i>
+                    <span class="font-medium">Cài đặt</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600" data-event="click:handleLogout" data-mock="true">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                    <span class="font-medium">Đăng xuất</span>
+                </a>
+                <!-- @END_MAP )) -->
+            </nav>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainLayout -->
+        <div class="flex-1 flex flex-col overflow-hidden react-component-boundary" data-component="MainLayout">
+            
+            <!-- @COMPONENT: Header -->
+            <header class="bg-white shadow-lg border-b border-slate-200 px-6 py-4 react-component-boundary" data-component="Header">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- @COMPONENT: MobileMenuButton -->
+                        <button class="lg:hidden p-2 rounded-lg hover:bg-slate-100 react-component-boundary" data-component="MobileMenuButton" data-event="click:toggleMobileMenu">
+                            <i class="fas fa-bars text-slate-600"></i>
+                        </button>
+                        
+                        <!-- @COMPONENT: DepartmentSelector -->
+                        <div class="relative react-component-boundary" data-component="DepartmentSelector">
+                            <!-- @STATE: isOpen:boolean = false -->
+                            <button data-event="click:toggleDepartmentModal" class="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 transition-all duration-200" data-mock="true">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-hospital-alt text-white text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-700" data-bind="selectedDepartment.name">Siêu Âm Trăng Đen + Điện Tim</span>
+                                <i class="fas fa-chevron-down text-slate-500 text-sm"></i>
+                            </button>
+                            <!-- @FUNCTIONALITY: Dropdown menu would appear here when isOpen is true -->
+                        </div>
+                    </div>
+
+                    <!-- @COMPONENT: HeaderActions -->
+                    <div class="flex items-center space-x-4 react-component-boundary" data-component="HeaderActions">
+                        <!-- @COMPONENT: NotificationButton -->
+                        <button class="p-2 rounded-lg hover:bg-slate-100 react-component-boundary" data-component="NotificationButton" data-event="click:showNotifications">
+                            <i class="fas fa-bell text-slate-600"></i>
+                        </button>
+                        
+                        <!-- @COMPONENT: UserProfile -->
+                        <div class="flex items-center space-x-3 react-component-boundary" data-component="UserProfile">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="font-medium text-slate-700" data-bind="user.department">Phòng công nghệ thông tin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: Header -->
+
+            <!-- @COMPONENT: MainContent -->
+            <main class="flex-1 overflow-auto react-component-boundary" data-component="MainContent">
+                
+                <!-- @COMPONENT: DashboardView -->
+                <div class="p-6 react-component-boundary" data-component="DashboardView">
+                    <!-- @COMPONENT: DashboardHeader -->
+                    <div class="flex items-center justify-between mb-8 react-component-boundary" data-component="DashboardHeader">
+                        <div>
+                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Bảng điều khiển</h1>
+                            <p class="text-slate-600">Quản lý hệ thống bệnh án điện tử</p>
+                        </div>
+                        
+                        <!-- @COMPONENT: DateTimeWidget -->
+                        <div class="glass-morphism rounded-xl p-4 text-center react-component-boundary" data-component="DateTimeWidget">
+                            <p class="text-sm text-slate-600 mb-1">Chào buổi sáng,</p>
+                            <p class="text-2xl font-bold text-slate-900" data-bind="currentTime">09:26:36</p>
+                            <p class="text-sm text-slate-600 mt-1" data-bind="currentDate">Tháng 8 - 2025</p>
+                            
+                            <!-- @COMPONENT: MiniCalendar -->
+                            <div class="mt-4 grid grid-cols-7 gap-1 text-xs react-component-boundary" data-component="MiniCalendar">
+                                <div class="text-slate-400 p-1">T2</div>
+                                <div class="text-slate-400 p-1">T3</div>
+                                <div class="text-slate-400 p-1">T4</div>
+                                <div class="text-slate-400 p-1">T5</div>
+                                <div class="text-slate-400 p-1">T6</div>
+                                <div class="text-slate-400 p-1">T7</div>
+                                <div class="text-slate-400 p-1">CN</div>
+                                
+                                <!-- @MAP: calendarDays.map(day => ( -->
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">01</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">02</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">03</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">04</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">05</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">06</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">07</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">08</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">09</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">10</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">11</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">12</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">13</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">14</div>
+                                <div class="bg-blue-500 text-white p-1 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">15</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">16</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">17</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">18</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">19</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">20</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer" data-event="click:selectDate" data-mock="true">21</div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: DateTimeWidget -->
+                    </div>
+
+                    <!-- @COMPONENT: StatsGrid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 react-component-boundary" data-component="StatsGrid">
+                        <!-- @MAP: statsData.map(stat => ( -->
+                        <!-- @COMPONENT: StatCard -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 card-hover react-component-boundary" data-component="StatCard" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 mb-1" data-bind="stat.label">Bệnh nhân hôm nay</p>
+                                    <p class="text-3xl font-bold text-slate-900" data-bind="stat.value">1,245</p>
+                                    <p class="text-sm text-green-600 mt-1" data-bind="stat.change">+12% từ hôm qua</p>
+                                </div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 card-hover react-component-boundary" data-component="StatCard" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 mb-1">Cuộc hẹn</p>
+                                    <p class="text-3xl font-bold text-slate-900">342</p>
+                                    <p class="text-sm text-green-600 mt-1">+8% từ tuần trước</p>
+                                </div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 card-hover react-component-boundary" data-component="StatCard" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 mb-1">Bệnh án điện tử</p>
+                                    <p class="text-3xl font-bold text-slate-900">8,234</p>
+                                    <p class="text-sm text-blue-600 mt-1">+15% từ tháng trước</p>
+                                </div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-file-medical text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 card-hover react-component-boundary" data-component="StatCard" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 mb-1">Doanh thu</p>
+                                    <p class="text-3xl font-bold text-slate-900">2.8M</p>
+                                    <p class="text-sm text-green-600 mt-1">+22% từ tháng trước</p>
+                                </div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+
+                    <!-- @COMPONENT: DashboardContent -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 react-component-boundary" data-component="DashboardContent">
+                        
+                        <!-- @COMPONENT: RecentActivities -->
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 react-component-boundary" data-component="RecentActivities">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-xl font-bold text-slate-900">Hoạt động gần đây</h2>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm font-medium" data-event="click:viewAllActivities">Xem tất cả</button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- @MAP: recentActivities.map(activity => ( -->
+                                <!-- @COMPONENT: ActivityItem -->
+                                <div class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="ActivityItem" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user-plus text-white text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-slate-900 font-medium" data-bind="activity.description">Bệnh nhân mới Nguyễn Văn A đã đăng ký</p>
+                                        <p class="text-sm text-slate-600" data-bind="activity.time">2 phút trước</p>
+                                    </div>
+                                    <span class="status-badge status-new" data-bind="activity.status">Mới</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="ActivityItem" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-check-circle text-white text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-slate-900 font-medium">Hoàn thành khám cho bệnh nhân Trần Thị B</p>
+                                        <p class="text-sm text-slate-600">5 phút trước</p>
+                                    </div>
+                                    <span class="status-badge status-completed">Hoàn thành</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="ActivityItem" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-clock text-white text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-slate-900 font-medium">Đang xử lý kết quả xét nghiệm</p>
+                                        <p class="text-sm text-slate-600">10 phút trước</p>
+                                    </div>
+                                    <span class="status-badge status-processing">Đang xử lý</span>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+
+                        <!-- @COMPONENT: QuickActions -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 react-component-boundary" data-component="QuickActions">
+                            <h2 class="text-xl font-bold text-slate-900 mb-6">Thao tác nhanh</h2>
+                            
+                            <div class="space-y-4">
+                                <!-- @MAP: quickActions.map(action => ( -->
+                                <!-- @COMPONENT: QuickActionButton -->
+                                <button class="w-full flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 transition-all duration-200 text-left react-component-boundary" data-component="QuickActionButton" data-event="click:handleQuickAction" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-plus text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-slate-900" data-bind="action.title">Thêm bệnh nhân mới</p>
+                                        <p class="text-sm text-slate-600" data-bind="action.description">Đăng ký thông tin bệnh nhân</p>
+                                    </div>
+                                </button>
+
+                                <button class="w-full flex items-center space-x-3 p-4 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg border border-green-200 transition-all duration-200 text-left react-component-boundary" data-component="QuickActionButton" data-event="click:handleQuickAction" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-calendar-plus text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-slate-900">Đặt lịch hẹn</p>
+                                        <p class="text-sm text-slate-600">Tạo cuộc hẹn mới</p>
+                                    </div>
+                                </button>
+
+                                <button class="w-full flex items-center space-x-3 p-4 bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-lg border border-purple-200 transition-all duration-200 text-left react-component-boundary" data-component="QuickActionButton" data-event="click:handleQuickAction" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-file-medical-alt text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-slate-900">Tạo bệnh án</p>
+                                        <p class="text-sm text-slate-600">Lập hồ sơ bệnh án điện tử</p>
+                                    </div>
+                                </button>
+
+                                <button class="w-full flex items-center space-x-3 p-4 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-lg border border-orange-200 transition-all duration-200 text-left react-component-boundary" data-component="QuickActionButton" data-event="click:handleQuickAction" data-mock="true">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-chart-bar text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-slate-900">Báo cáo thống kê</p>
+                                        <p class="text-sm text-slate-600">Xem báo cáo chi tiết</p>
+                                    </div>
+                                </button>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: DashboardView -->
+            </main>
+            <!-- @END_COMPONENT: MainContent -->
+        </div>
+        <!-- @END_COMPONENT: MainLayout -->
+    </div>
+    <!-- @END_COMPONENT: App -->
+
+    <!-- @COMPONENT: DepartmentModal (Hidden by default) -->
+    <div id="departmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden react-component-boundary" data-component="DepartmentModal">
+        <!-- @STATE: isOpen:boolean = false -->
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" data-implementation="Should animate when modal opens">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900">Chọn khoa phòng</h3>
+                <button data-event="click:closeDepartmentModal" class="p-2 hover:bg-slate-100 rounded-lg" data-mock="true">
+                    <i class="fas fa-times text-slate-600"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-2">
+                <!-- @MAP: departments.map(department => ( -->
+                <!-- @COMPONENT: DepartmentOption -->
+                <button class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="DepartmentOption" data-event="click:selectDepartment" data-mock="true">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hospital-alt text-white text-sm"></i>
+                        </div>
+                        <span class="font-medium text-slate-900" data-bind="department.name">Siêu Âm Trăng Đen + Điện Tim</span>
+                    </div>
+                </button>
+                
+                <button class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="DepartmentOption" data-event="click:selectDepartment" data-mock="true">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-x-ray text-white text-sm"></i>
+                        </div>
+                        <span class="font-medium text-slate-900">Khoa X-Quang</span>
+                    </div>
+                </button>
+                
+                <button class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors react-component-boundary" data-component="DepartmentOption" data-event="click:selectDepartment" data-mock="true">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-vial text-white text-sm"></i>
+                        </div>
+                        <span class="font-medium text-slate-900">Khoa Xét Nghiệm</span>
+                    </div>
+                </button>
+                <!-- @END_MAP )) -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: DepartmentModal -->
+
+    <script>
+        // TODO: Replace with React hooks and state management
+        (function() {
+            // Mock data for demonstration - in React this would be state/props
+            const mockData = {
+                currentTime: new Date().toLocaleTimeString('vi-VN'),
+                currentDate: new Date().toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' }),
+                selectedDepartment: {
+                    name: 'Siêu Âm Trăng Đen + Điện Tim'
+                },
+                user: {
+                    department: 'Phòng công nghệ thông tin'
+                }
+            };
+
+            // Time update functionality - in React this would be useEffect with setInterval
+            function updateTime() {
+                const timeElement = document.querySelector('[data-bind="currentTime"]');
+                const dateElement = document.querySelector('[data-bind="currentDate"]');
+                
+                if (timeElement) {
+                    timeElement.textContent = new Date().toLocaleTimeString('vi-VN');
+                }
+                if (dateElement) {
+                    dateElement.textContent = new Date().toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
+                }
+            }
+
+            // Modal functionality - in React this would be useState
+            window.toggleDepartmentModal = function() {
+                const modal = document.getElementById('departmentModal');
+                const modalContent = modal.querySelector('div > div');
+                
+                if (modal.classList.contains('hidden')) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => {
+                        modalContent.classList.remove('scale-95', 'opacity-0');
+                        modalContent.classList.add('scale-100', 'opacity-100');
+                    }, 10);
+                } else {
+                    modalContent.classList.add('scale-95', 'opacity-0');
+                    modalContent.classList.remove('scale-100', 'opacity-100');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                    }, 300);
+                }
+            };
+
+            // Close modal when clicking outside - in React this would be useRef and event handlers
+            document.getElementById('departmentModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    toggleDepartmentModal();
+                }
+            });
+
+            // Update time every second
+            setInterval(updateTime, 1000);
+            updateTime(); // Initial call
+        })();
+    </script>
+</body>
+</html>

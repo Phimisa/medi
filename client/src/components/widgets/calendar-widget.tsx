@@ -39,7 +39,7 @@ export default function CalendarWidget() {
   const today = new Date().getDate();
 
   return (
-    <div className="glass-morphism rounded-xl p-4 text-center" data-testid="calendar-widget">
+    <div className="glass-morphism rounded-xl text-center card-hover bg-white  p-6 shadow-lg border border-slate-200" data-testid="calendar-widget">
       <p className="text-sm text-slate-600 mb-1">Chào buổi sáng,</p>
       <p className="text-2xl font-bold text-slate-900 mb-1" data-testid="current-time">
         {formatTime(currentTime)}

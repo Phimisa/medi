@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { ArrowLeft, List, Heart, Stethoscope, Archive, Edit, LogOut } from "lucide-react";
+import { ArrowLeft, List, Heart, Stethoscope, Archive, Edit, LogOut, ChevronRight, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const managementModules = [
   {
@@ -68,16 +69,27 @@ const managementModules = [
 export default function PatientManagement() {
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <Link href="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 mb-4" data-testid="back-to-dashboard">
-            <ArrowLeft size={20} />
-            <span>Trang chủ</span>
+
+      <div className="mb-6">
+        <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
+          <Link href="/" className="hover:text-blue-600" data-testid="breadcrumb-home">
+            Trang chủ
           </Link>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Quản lý bệnh án</h1>
-          <p className="text-slate-600">Hệ thống quản lý bệnh án điện tử chuyên nghiệp</p>
+          <ChevronRight size={14} />
+          <Link href="/patient-management" className="hover:text-blue-600" data-testid="breadcrumb-current">
+            Bệnh án
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Quản lý bệnh án</h1>
+            <p className="text-slate-600">Hệ thống quản lý bệnh án điện tử chuyên nghiệp</p>
+          </div>
+
         </div>
       </div>
+
 
       {/* Management Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

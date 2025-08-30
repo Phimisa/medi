@@ -11,58 +11,58 @@ interface DepartmentModalProps {
 const departments = [
   {
     id: "general-medicine",
-    name: "General Medicine",
-    description: "Primary care and general consultations",
+    name: "Nội tổng quát",
+    description: "Khám và tư vấn sức khỏe tổng quát",
     icon: Hospital,
     iconColor: "from-blue-500 to-blue-600",
     current: true
   },
   {
     id: "cardiology",
-    name: "Cardiology",
-    description: "Heart and cardiovascular care",
+    name: "Tim mạch",
+    description: "Khám và điều trị các bệnh về tim mạch",
     icon: Heart,
     iconColor: "from-red-500 to-red-600"
   },
   {
     id: "neurology",
-    name: "Neurology",
-    description: "Brain and nervous system care",
+    name: "Thần kinh",
+    description: "Khám và điều trị hệ thần kinh",
     icon: Brain,
     iconColor: "from-purple-500 to-purple-600"
   },
   {
     id: "orthopedics",
-    name: "Orthopedics",
-    description: "Bone and joint treatment",
+    name: "Chấn thương chỉnh hình",
+    description: "Khám và điều trị xương khớp",
     icon: Bone,
     iconColor: "from-teal-500 to-teal-600"
   },
   {
     id: "pediatrics",
-    name: "Pediatrics",
-    description: "Children and adolescent care",
+    name: "Nhi khoa",
+    description: "Chăm sóc trẻ em và thanh thiếu niên",
     icon: Baby,
     iconColor: "from-pink-500 to-pink-600"
   },
   {
     id: "emergency",
-    name: "Emergency Department",
-    description: "Critical and urgent care",
+    name: "Cấp cứu",
+    description: "Điều trị khẩn cấp và cấp cứu",
     icon: Ambulance,
     iconColor: "from-orange-500 to-orange-600"
   },
   {
     id: "surgery",
-    name: "Surgery",
-    description: "Surgical procedures and operations",
+    name: "Ngoại khoa",
+    description: "Thực hiện các phẫu thuật và thủ thuật",
     icon: ScissorsIcon,
     iconColor: "from-gray-500 to-gray-600"
   },
   {
     id: "icu",
-    name: "Intensive Care Unit",
-    description: "Critical care monitoring",
+    name: "Hồi sức tích cực (ICU)",
+    description: "Chăm sóc và theo dõi bệnh nhân nặng",
     icon: Monitor,
     iconColor: "from-indigo-500 to-indigo-600"
   }
@@ -93,8 +93,8 @@ export default function DepartmentModal({ isOpen, onClose, selectedDepartment, o
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden animate-scale-in">
         <div className="p-6 border-b border-slate-200 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Select Department</h2>
-            <p className="text-slate-600 mt-1">Choose your working department</p>
+            <h2 className="text-2xl font-bold text-slate-900">Chọn khoa phòng</h2>
+            <p className="text-slate-600 mt-1">Hãy chọn khoa làm việc của bạn</p>
           </div>
           <button 
             onClick={onClose}
@@ -105,13 +105,13 @@ export default function DepartmentModal({ isOpen, onClose, selectedDepartment, o
           </button>
         </div>
         
-        {/* Search Bar */}
+        {/* Thanh tìm kiếm */}
         <div className="p-6 border-b border-slate-200">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
             <input 
               type="text" 
-              placeholder="Search departments..."
+              placeholder="Tìm kiếm khoa phòng..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
@@ -120,7 +120,7 @@ export default function DepartmentModal({ isOpen, onClose, selectedDepartment, o
           </div>
         </div>
 
-        {/* Department Grid */}
+        {/* Danh sách khoa */}
         <div className="p-6 max-h-96 overflow-y-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredDepartments.map((dept) => {
@@ -147,7 +147,7 @@ export default function DepartmentModal({ isOpen, onClose, selectedDepartment, o
                       <p className="text-sm text-slate-600">{dept.description}</p>
                       {isCurrent && (
                         <span className="inline-block mt-2 text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                          Current
+                          Đang chọn
                         </span>
                       )}
                     </div>

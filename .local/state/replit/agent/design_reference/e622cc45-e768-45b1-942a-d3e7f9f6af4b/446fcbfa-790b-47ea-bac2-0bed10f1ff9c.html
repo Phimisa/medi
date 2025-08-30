@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bệnh Án Điện Tử - EMR Professional (React Version)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.2s ease-in-out',
+                    'slide-in': 'slideIn 0.3s ease-out',
+                    'scale-in': 'scaleIn 0.2s ease-out',
+                }
+            }
+        }
+    };
+    </script>
+    
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(221.2 83.2% 53.3%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(142.1 76.2% 36.3%);
+            --accent-foreground: hsl(355.7 100% 97.3%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221.2 83.2% 53.3%);
+            --radius: 0.75rem;
+        }
+
+        * {
+            border-color: hsl(var(--border));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 53.3%) 0%, hsl(221.2 83.2% 45%) 100%);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 45%) 0%, hsl(221.2 83.2% 40%) 100%);
+            transform: translateY(-1px);
+        }
+
+        .medical-icon {
+            background: linear-gradient(135deg, hsl(142.1 76.2% 36.3%) 0%, hsl(142.1 76.2% 30%) 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        .status-new { background: hsl(142.1 76.2% 95%); color: hsl(142.1 76.2% 36.3%); }
+        .status-processing { background: hsl(47 96% 95%); color: hsl(47 96% 53%); }
+        .status-completed { background: hsl(221.2 83.2% 95%); color: hsl(221.2 83.2% 53.3%); }
+    </style>
+</head>
+<body class="h-full overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // @COMPONENT: Sidebar
+        const Sidebar = () => {
+            const menuItems = [
+                { icon: 'fas fa-certificate', label: 'Chứng thư số', href: '#' },
+                { icon: 'fas fa-print', label: 'In tập tin dữ liệu', href: '#' },
+                { icon: 'fas fa-cog', label: 'Cài đặt', href: '#' },
+                { icon: 'fas fa-sign-out-alt', label: 'Đăng xuất', href: '#' }
+            ];
+
+            return (
+                <div className="w-72 bg-white shadow-2xl border-r border-slate-200 flex flex-col">
+                    {/* Sidebar Header */}
+                    <div className="p-6 border-b border-slate-200">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                                <i className="fas fa-user-md text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-slate-900">EMR</h3>
+                                <p className="text-sm text-slate-600">Phòng công nghệ thông tin</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Navigation Menu */}
+                    <nav className="flex-1 p-4 space-y-2">
+                        {menuItems.map((item, index) => (
+                            <a 
+                                key={index}
+                                href={item.href} 
+                                className="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600"
+                            >
+                                <i className={`${item.icon} w-5 text-center`}></i>
+                                <span className="font-medium">{item.label}</span>
+                            </a>
+                        ))}
+                    </nav>
+                </div>
+            );
+        };
+
+        // @COMPONENT: Header
+        const Header = () => {
+            const [isDepartmentModalOpen, setIsDepartmentModalOpen] = useState(false);
+
+            const toggleDepartmentModal = () => {
+                setIsDepartmentModalOpen(!isDepartmentModalOpen);
+                // TODO: Implement department modal functionality
+            };
+
+            return (
+                <header className="bg-white shadow-lg border-b border-slate-200 px-6 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                            <button className="lg:hidden p-2 rounded-lg hover:bg-slate-100">
+                                <i className="fas fa-bars text-slate-600"></i>
+                            </button>
+                            
+                            {/* Department Selector */}
+                            <div className="relative">
+                                <button 
+                                    onClick={toggleDepartmentModal}
+                                    className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 transition-all duration-200"
+                                >
+                                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                                        <i className="fas fa-hospital-alt text-white text-sm"></i>
+                                    </div>
+                                    <span className="font-medium text-slate-700">Siêu Âm Trăng Đen + Điện Tim</span>
+                                    <i className="fas fa-chevron-down text-slate-500 text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                            <button className="p-2 rounded-lg hover:bg-slate-100">
+                                <i className="fas fa-bell text-slate-600"></i>
+                            </button>
+                            <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center">
+                                    <i className="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span className="font-medium text-slate-700">Phòng công nghệ thông tin</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        // @COMPONENT: DateTimeWidget
+        const DateTimeWidget = () => {
+            const [currentTime, setCurrentTime] = useState('09:26:36');
+            const [currentDate, setCurrentDate] = useState('Tháng 8 - 2025');
+
+            // TODO: Implement real-time clock functionality
+            useEffect(() => {
+                // Placeholder for real-time updates
+            }, []);
+
+            const calendarDays = Array.from({ length: 31 }, (_, i) => i + 1);
+            const weekDays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+
+            return (
+                <div className="glass-morphism rounded-xl p-4 text-center">
+                    <p className="text-sm text-slate-600 mb-1">Chào buổi sáng,</p>
+                    <p className="text-2xl font-bold text-slate-900">{currentTime}</p>
+                    <p className="text-sm text-slate-600 mt-1">{currentDate}</p>
+                    
+                    {/* Mini Calendar */}
+                    <div className="mt-4 grid grid-cols-7 gap-1 text-xs">
+                        {weekDays.map((day, index) => (
+                            <div key={index} className="text-slate-400 p-1">{day}</div>
+                        ))}
+                        
+                        {/* Calendar days (first week for demo) */}
+                        {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                            <div 
+                                key={day} 
+                                className="p-1 hover:bg-blue-100 rounded cursor-pointer"
+                                data-mock="true"
+                            >
+                                {day.toString().padStart(2, '0')}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // @COMPONENT: DashboardStats
+        const DashboardStats = () => {
+            const stats = [
+                {
+                    icon: 'fas fa-users',
+                    title: 'Bệnh nhân hôm nay',
+                    value: '147',
+                    change: '+12%',
+                    trend: 'up'
+                },
+                {
+                    icon: 'fas fa-file-medical',
+                    title: 'Hồ sơ mới',
+                    value: '32',
+                    change: '+8%',
+                    trend: 'up'
+                },
+                {
+                    icon: 'fas fa-stethoscope',
+                    title: 'Khám hoàn thành',
+                    value: '89',
+                    change: '+5%',
+                    trend: 'up'
+                },
+                {
+                    icon: 'fas fa-clipboard-check',
+                    title: 'Báo cáo chờ',
+                    value: '23',
+                    change: '-3%',
+                    trend: 'down'
+                }
+            ];
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    {/* @MAP: stats.map(stat => ( */}
+                    {stats.map((stat, index) => (
+                        <div key={index} className="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-slate-600 mb-2">{stat.title}</p>
+                                    <p className="text-3xl font-bold text-slate-900" data-mock="true">{stat.value}</p>
+                                    <div className="flex items-center mt-2">
+                                        <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                                            {stat.change}
+                                        </span>
+                                        <span className="text-xs text-slate-500 ml-1">so với hôm qua</span>
+                                    </div>
+                                </div>
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${stat.trend === 'up' ? 'medical-icon' : 'bg-gradient-to-br from-red-500 to-red-600'}`}>
+                                    <i className={`${stat.icon} text-white text-lg`}></i>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {/* @END_MAP )) */}
+                </div>
+            );
+        };
+
+        // @COMPONENT: RecentActivities
+        const RecentActivities = () => {
+            const activities = [
+                {
+                    id: 1,
+                    patient: 'Nguyễn Văn A',
+                    action: 'Khám siêu âm tim',
+                    time: '10:30',
+                    status: 'completed',
+                    doctor: 'BS. Trần Thị B'
+                },
+                {
+                    id: 2,
+                    patient: 'Lê Thị C',
+                    action: 'Điện tim',
+                    time: '11:15',
+                    status: 'processing',
+                    doctor: 'BS. Nguyễn Văn D'
+                },
+                {
+                    id: 3,
+                    patient: 'Phạm Văn E',
+                    action: 'Siêu âm ổ bụng',
+                    time: '14:20',
+                    status: 'new',
+                    doctor: 'BS. Hoàng Thị F'
+                }
+            ];
+
+            const getStatusBadge = (status) => {
+                const statusMap = {
+                    'new': { class: 'status-new', label: 'Mới' },
+                    'processing': { class: 'status-processing', label: 'Đang xử lý' },
+                    'completed': { class: 'status-completed', label: 'Hoàn thành' }
+                };
+                return statusMap[status] || statusMap['new'];
+            };
+
+            return (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Recent Activities */}
+                    <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-lg font-semibold text-slate-900">Hoạt động gần đây</h3>
+                            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                Xem tất cả
+                            </button>
+                        </div>
+                        
+                        <div className="space-y-4">
+                            {/* @MAP: activities.map(activity => ( */}
+                            {activities.map((activity) => (
+                                <div key={activity.id} className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg transition-colors" data-mock="true">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                                            <i className="fas fa-user-injured text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-slate-900">{activity.patient}</p>
+                                            <p className="text-sm text-slate-600">{activity.action}</p>
+                                            <p className="text-xs text-slate-500">{activity.doctor}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm text-slate-600 mb-1">{activity.time}</p>
+                                        <span className={`status-badge ${getStatusBadge(activity.status).class}`}>
+                                            {getStatusBadge(activity.status).label}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                            {/* @END_MAP )) */}
+                        </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                        <h3 className="text-lg font-semibold text-slate-900 mb-6">Thao tác nhanh</h3>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                            <button className="card-hover p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200 text-center">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                                    <i className="fas fa-plus text-white"></i>
+                                </div>
+                                <p className="text-sm font-medium text-slate-700">Tạo hồ sơ mới</p>
+                            </button>
+                            
+                            <button className="card-hover p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200 text-center">
+                                <div className="w-12 h-12 medical-icon rounded-lg mx-auto mb-3 flex items-center justify-center">
+                                    <i className="fas fa-search text-white"></i>
+                                </div>
+                                <p className="text-sm font-medium text-slate-700">Tìm kiếm bệnh án</p>
+                            </button>
+                            
+                            <button className="card-hover p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200 text-center">
+                                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                                    <i className="fas fa-calendar-alt text-white"></i>
+                                </div>
+                                <p className="text-sm font-medium text-slate-700">Lịch hẹn</p>
+                            </button>
+                            
+                            <button className="card-hover p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200 text-center">
+                                <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                                    <i className="fas fa-chart-bar text-white"></i>
+                                </div>
+                                <p className="text-sm font-medium text-slate-700">Báo cáo</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // @COMPONENT: Dashboard
+        const Dashboard = () => {
+            return (
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 className="text-3xl font-bold text-slate-900 mb-2">Bảng điều khiển</h1>
+                            <p className="text-slate-600">Quản lý hệ thống bệnh án điện tử</p>
+                        </div>
+                        
+                        <DateTimeWidget />
+                    </div>
+                    
+                    <DashboardStats />
+                    <RecentActivities />
+                </div>
+            );
+        };
+
+        // @COMPONENT: EMRApplication (Main App)
+        const EMRApplication = () => {
+            // @STATE: sidebarOpen:boolean = false (for mobile)
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+
+            return (
+                <div className="h-full flex bg-gradient-to-br from-slate-50 to-slate-100">
+                    <Sidebar />
+                    
+                    {/* Main Content Area */}
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        <Header />
+                        
+                        {/* @COMPONENT: MainContent */}
+                        <main className="flex-1 overflow-auto">
+                            <Dashboard />
+                        </main>
+                        {/* @END_COMPONENT: MainContent */}
+                    </div>
+                </div>
+            );
+        };
+
+        // @COMPONENT: App (Root Component)
+        const App = () => {
+            return (
+                <div className="h-full">
+                    <EMRApplication />
+                </div>
+            );
+        };
+
+        // Render the application
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+        // TODO: Implement state management with Context API or Redux
+        // TODO: Add routing with React Router
+        // TODO: Implement real-time data fetching
+        // TODO: Add form validation and error handling
+        // TODO: Implement department modal functionality
+        // TODO: Add loading states and error boundaries
+    </script>
+
+    <script>
+        // Global utilities for demonstration purposes
+        (function() {
+            // TODO: Replace with React state management
+            window.toggleDepartmentModal = function() {
+                console.log('Department modal toggle - implement in React component');
+            };
+
+            // Mock time update simulation
+            // TODO: Implement in React component with useEffect
+            console.log('EMR System initialized - Ready for React conversion');
+        })();
+    </script>
+</body>
+</html>

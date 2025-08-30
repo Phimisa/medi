@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bệnh Án Điện Tử - EMR Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.2s ease-in-out',
+                    'slide-in': 'slideIn 0.3s ease-out',
+                    'scale-in': 'scaleIn 0.2s ease-out',
+                }
+            }
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(217.2 91.2% 59.8%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(142.1 76.2% 36.3%);
+            --accent-foreground: hsl(355.7 100% 97.3%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(217.2 91.2% 59.8%);
+            --radius: 0.75rem;
+        }
+
+        * {
+            border-color: hsl(var(--border));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        .status-new { background: #dcfce7; color: #16a34a; }
+        .status-processing { background: #fef3c7; color: #d97706; }
+        .status-completed { background: #dbeafe; color: #2563eb; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="h-full overflow-hidden">
+    <!-- @COMPONENT: EMRApplication -->
+    <div class="h-full flex">
+        
+        <!-- @COMPONENT: Sidebar -->
+        <div class="w-72 bg-white shadow-xl border-r border-slate-200 flex flex-col">
+            <!-- Sidebar Header -->
+            <div class="p-6 border-b border-slate-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-md text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900">EMR</h3>
+                        <p class="text-sm text-slate-600">Phòng công nghệ thông tin</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" onclick="showView('dashboard')" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span class="font-medium">Trang chủ</span>
+                </a>
+                <a href="#" onclick="showView('records')" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-file-medical w-5 text-center"></i>
+                    <span class="font-medium">Bệnh án</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-certificate w-5 text-center"></i>
+                    <span class="font-medium">Chứng thư số</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-print w-5 text-center"></i>
+                    <span class="font-medium">In tập tin dữ liệu</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-cog w-5 text-center"></i>
+                    <span class="font-medium">Cài đặt</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                    <span class="font-medium">Đăng xuất</span>
+                </a>
+            </nav>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- @COMPONENT: Header -->
+            <header class="bg-white shadow-lg border-b border-slate-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- Department Selector -->
+                        <div class="relative">
+                            <button onclick="toggleDepartmentModal()" class="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 transition-all duration-200">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-hospital-alt text-white text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-700" data-bind="selectedDepartment">Siêu Âm Trăng Đen + Điện Tim</span>
+                                <i class="fas fa-chevron-down text-slate-500 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-lg hover:bg-slate-100">
+                            <i class="fas fa-bell text-slate-600"></i>
+                        </button>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="font-medium text-slate-700">Phòng công nghệ thông tin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: Header -->
+
+            <!-- @COMPONENT: MainContent -->
+            <main class="flex-1 overflow-auto bg-slate-50">
+                
+                <!-- Dashboard View -->
+                <!-- @COMPONENT: DashboardView -->
+                <div id="dashboard-view" class="p-6">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Bảng điều khiển</h1>
+                            <p class="text-slate-600">Quản lý hệ thống bệnh án điện tử</p>
+                        </div>
+                        
+                        <!-- @COMPONENT: DateTimeWidget -->
+                        <div class="glass-morphism rounded-xl p-4 text-center bg-white/90 backdrop-blur-sm border border-white/20">
+                            <p class="text-sm text-slate-600 mb-1">Chào buổi sáng,</p>
+                            <p class="text-2xl font-bold text-slate-900" data-bind="currentTime">15:18:15</p>
+                            <p class="text-sm text-slate-600 mt-1" data-bind="currentDate">Tháng 8 - 2025</p>
+                            
+                            <!-- Mini Calendar -->
+                            <div class="mt-4">
+                                <div class="grid grid-cols-7 gap-1 text-xs mb-2">
+                                    <div class="text-slate-400 p-1 font-medium">T2</div>
+                                    <div class="text-slate-400 p-1 font-medium">T3</div>
+                                    <div class="text-slate-400 p-1 font-medium">T4</div>
+                                    <div class="text-slate-400 p-1 font-medium">T5</div>
+                                    <div class="text-slate-400 p-1 font-medium">T6</div>
+                                    <div class="text-slate-400 p-1 font-medium">T7</div>
+                                    <div class="text-slate-400 p-1 font-medium">CN</div>
+                                </div>
+                                <div class="grid grid-cols-7 gap-1 text-xs">
+                                    <!-- Calendar days -->
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">26</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">27</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">28</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">29</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">30</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">31</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">01</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">02</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">03</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">04</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">05</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">06</div>
+                                    <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">07</div>
+                                    <div class="p-1 bg-blue-600 text-white rounded cursor-pointer">08</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: DateTimeWidget -->
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                        <!-- @MAP: dashboardStats.map(stat => ( -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Bệnh nhân hôm nay</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">142</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-user-injured text-white text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Lịch hẹn hôm nay</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">23</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-white text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Cấp cứu</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">8</p>
+                                </div>
+                                <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-ambulance text-white text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Tổng bệnh nhân</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">2,847</p>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-white text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+
+                    <!-- Additional Sections -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Help Center -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-slate-900">Trung tâm trợ giúp</h3>
+                                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-question-circle text-white"></i>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 mb-4">Hướng dẫn sử dụng và hỗ trợ kỹ thuật</p>
+                            <button onclick="// TODO: Navigate to help center" class="text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-1">
+                                <span>Xem chi tiết</span>
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Medical Records -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-slate-900">Bệnh án</h3>
+                                <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-file-medical-alt text-white"></i>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 mb-4">Quản lý hồ sơ bệnh án điện tử chuyên nghiệp</p>
+                            <button onclick="showView('records')" class="text-green-600 hover:text-green-700 font-medium flex items-center space-x-1">
+                                <span>Truy cập</span>
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="mt-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">Hoạt động gần đây</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-medium">VA</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-slate-900">Bệnh án mới được tạo</p>
+                                    <p class="text-xs text-slate-600">Nguyễn Văn A • 30 phút trước</p>
+                                </div>
+                                <span class="text-xs text-slate-500">Mới</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-slate-900">Cập nhật kết quả xét nghiệm</p>
+                                    <p class="text-xs text-slate-600">Lê Văn B • 1 giờ trước</p>
+                                </div>
+                                <span class="text-xs text-slate-500">Hoàn thành</span>
+                            </div>
+
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-medium">TB</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-slate-900">Hoàn thành khám chuyên khoa</p>
+                                    <p class="text-xs text-slate-600">Lê Văn C • 1 giờ trước</p>
+                                </div>
+                                <span class="text-xs text-slate-500">Hoàn thành</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: DashboardView -->
+
+                <!-- Medical Records Management View -->
+                <!-- @COMPONENT: MedicalRecordsView -->
+                <div id="records-view" class="p-6 hidden">
+                    <!-- Breadcrumb -->
+                    <nav class="flex mb-6" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <button onclick="showView('dashboard')" class="text-slate-700 hover:text-blue-600 font-medium">Trang chủ</button>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chevron-right text-slate-400 mx-2"></i>
+                                    <span class="text-slate-500 font-medium">Bệnh án</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-slate-900 mb-2">Quản lý bệnh án</h1>
+                        <p class="text-slate-600">Hệ thống quản lý bệnh án điện tử chuyên nghiệp</p>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer" onclick="showView('patient-list')">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Danh sách người bệnh tại khoa</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">245</p>
+                                    <p class="text-xs text-slate-500 mt-1">Quản lý danh sách bệnh nhân trong khoa</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-list-alt text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem danh sách</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Chỉ nhận chức năng sống</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">89</p>
+                                    <p class="text-xs text-slate-500 mt-1">Theo dõi các chỉ số sinh tồn</p>
+                                </div>
+                                <div class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-heartbeat text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem chi tiết</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Khám chuyên khoa</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">156</p>
+                                    <p class="text-xs text-slate-500 mt-1">Quản lý khám bệnh chuyên khoa</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-stethoscope text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Truy cập</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Kho hồ sơ số</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">1,247</p>
+                                    <p class="text-xs text-slate-500 mt-1">Lưu trữ và quản lý hồ sơ điện tử</p>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-archive text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Truy cập kho</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Hồ sơ bệnh ký</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">67</p>
+                                    <p class="text-xs text-slate-500 mt-1">Quản lý và ký các phiếu chuyển</p>
+                                </div>
+                                <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-signature text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem danh sách</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 card-hover cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600">Quản lý xuất viện</p>
+                                    <p class="text-3xl font-bold text-slate-900 mt-2">34</p>
+                                    <p class="text-xs text-slate-500 mt-1">Xử lý thủ tục xuất viện</p>
+                                </div>
+                                <div class="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-sign-out-alt text-white text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+                                <span>Quản lý</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: MedicalRecordsView -->
+
+                <!-- Patient List View -->
+                <!-- @COMPONENT: PatientListView -->
+                <div id="patient-list-view" class="p-6 hidden">
+                    <!-- Breadcrumb -->
+                    <nav class="flex mb-6" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <button onclick="showView('dashboard')" class="text-slate-700 hover:text-blue-600 font-medium">Trang chủ</button>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chevron-right text-slate-400 mx-2"></i>
+                                    <button onclick="showView('records')" class="text-slate-700 hover:text-blue-600 font-medium">Bệnh án</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chevron-right text-slate-400 mx-2"></i>
+                                    <span class="text-slate-500 font-medium">Danh sách người bệnh tại khoa</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-slate-900 mb-2">Danh sách người bệnh tại khoa</h1>
+                        <p class="text-slate-600">Quản lý thông tin bệnh nhân trong khoa</p>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-lg border border-slate-200 p-4 text-center">
+                            <p class="text-2xl font-bold text-slate-900">245</p>
+                            <p class="text-sm text-slate-600">Tổng số</p>
+                        </div>
+                        <div class="bg-white rounded-lg border border-slate-200 p-4 text-center">
+                            <p class="text-2xl font-bold text-green-600">12</p>
+                            <p class="text-sm text-slate-600">Mới vào</p>
+                        </div>
+                        <div class="bg-white rounded-lg border border-slate-200 p-4 text-center">
+                            <p class="text-2xl font-bold text-orange-600">8</p>
+                            <p class="text-sm text-slate-600">Đang khám</p>
+                        </div>
+                        <div class="bg-white rounded-lg border border-slate-200 p-4 text-center">
+                            <p class="text-2xl font-bold text-blue-600">156</p>
+                            <p class="text-sm text-slate-600">Đã khám</p>
+                        </div>
+                    </div>
+
+                    <!-- Filters and Actions -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                            <div class="flex flex-col lg:flex-row gap-4 flex-1">
+                                <div class="flex-1">
+                                    <select class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option>Tên bệnh nhân, BHYT...</option>
+                                        <option>Tìm theo tên</option>
+                                        <option>Tìm theo BHYT</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option>Trạng thái</option>
+                                        <option>Mới vào</option>
+                                        <option>Đang khám</option>
+                                        <option>Đã khám</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="mm/dd/yyyy" class="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <input type="text" placeholder="mm/dd/yyyy" class="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            <button onclick="// TODO: Open add patient modal" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center space-x-2">
+                                <i class="fas fa-plus"></i>
+                                <span>Thêm bệnh nhân</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Patient Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Thông tin bệnh nhân</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">BHYT</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Ngày sinh</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Giới tính</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Trạng thái</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Ngày vào</th>
+                                        <th class="text-left py-3 px-6 font-medium text-slate-700">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <!-- @MAP: patients.map(patient => ( -->
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-sm font-medium">VA</span>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-900">Nguyễn Văn A</p>
+                                                    <p class="text-sm text-slate-600">ID: 25070675</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">VN12345678</td>
+                                        <td class="py-4 px-6 text-slate-700">15/03/1985</td>
+                                        <td class="py-4 px-6 text-slate-700">Nam</td>
+                                        <td class="py-4 px-6">
+                                            <span class="status-badge status-processing">Đã khám</span>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">30/08/2025</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex space-x-2">
+                                                <button onclick="openPatientModal('view', 'VA')" class="text-blue-600 hover:text-blue-700">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button onclick="openPatientModal('edit', 'VA')" class="text-green-600 hover:text-green-700">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-700">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-sm font-medium">TB</span>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-900">Trần Thị Bình</p>
+                                                    <p class="text-sm text-slate-600">ID: 25070625</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">VN98764321</td>
+                                        <td class="py-4 px-6 text-slate-700">22/07/1978</td>
+                                        <td class="py-4 px-6 text-slate-700">Nữ</td>
+                                        <td class="py-4 px-6">
+                                            <span class="status-badge status-new">Đã khám</span>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">29/08/2025</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex space-x-2">
+                                                <button onclick="openPatientModal('view', 'TB')" class="text-blue-600 hover:text-blue-700">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button onclick="openPatientModal('edit', 'TB')" class="text-green-600 hover:text-green-700">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-700">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-sm font-medium">LD</span>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-slate-900">Lê Văn Dương</p>
+                                                    <p class="text-sm text-slate-600">ID: 25070623</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">VN45738923</td>
+                                        <td class="py-4 px-6 text-slate-700">10/12/1992</td>
+                                        <td class="py-4 px-6 text-slate-700">Nam</td>
+                                        <td class="py-4 px-6">
+                                            <span class="status-badge status-completed">Mới</span>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-700">30/08/2025</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex space-x-2">
+                                                <button onclick="openPatientModal('view', 'LD')" class="text-blue-600 hover:text-blue-700">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button onclick="openPatientModal('edit', 'LD')" class="text-green-600 hover:text-green-700">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-700">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="px-6 py-3 border-t border-slate-200 flex items-center justify-between">
+                            <p class="text-sm text-slate-700">Hiển thị 1 đến 10 trong 245 kết quả</p>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-1 text-sm border border-slate-300 rounded hover:bg-slate-50">1</button>
+                                <button class="px-3 py-1 text-sm border border-slate-300 rounded hover:bg-slate-50">2</button>
+                                <button class="px-3 py-1 text-sm border border-slate-300 rounded hover:bg-slate-50">3</button>
+                                <button class="px-3 py-1 text-sm border border-slate-300 rounded hover:bg-slate-50">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: PatientListView -->
+
+            </main>
+            <!-- @END_COMPONENT: MainContent -->
+        </div>
+    </div>
+    <!-- @END_COMPONENT: EMRApplication -->
+
+    <!-- @COMPONENT: PatientModal -->
+    <div id="patient-modal" class="fixed inset-0 modal-overlay flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden animate-scale-in">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-slate-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900">Patient Details</h3>
+                        <p class="text-sm text-slate-600">ID: 25070675 • Record: 0005199/25</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="edit-btn" onclick="toggleEditMode()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center space-x-2">
+                        <i class="fas fa-edit"></i>
+                        <span>Edit</span>
+                    </button>
+                    <button id="cancel-btn" onclick="toggleEditMode()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium hidden">
+                        Cancel
+                    </button>
+                    <button onclick="closePatientModal()" class="p-2 hover:bg-slate-100 rounded-lg">
+                        <i class="fas fa-times text-slate-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Basic Information -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-slate-900 mb-4">Basic Information</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                                <div id="view-name" class="text-slate-900 font-medium">Tran Minh Thuan</div>
+                                <input id="edit-name" type="text" value="Tran Minh Thuan" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Gender</label>
+                                    <div id="view-gender" class="text-slate-900">Male</div>
+                                    <select id="edit-gender" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="male" selected>Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Birth Year</label>
+                                    <div id="view-birth" class="text-slate-900">2002</div>
+                                    <input id="edit-birth" type="text" value="2002" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+                                <div id="view-phone" class="flex items-center space-x-2">
+                                    <i class="fas fa-phone text-slate-500"></i>
+                                    <span class="text-slate-900">0901234567</span>
+                                </div>
+                                <input id="edit-phone" type="text" value="0901234567" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Address</label>
+                                <div id="view-address" class="flex items-start space-x-2">
+                                    <i class="fas fa-map-marker-alt text-slate-500 mt-1"></i>
+                                    <span class="text-slate-900">Ho Chi Minh City</span>
+                                </div>
+                                <textarea id="edit-address" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" rows="3">Ho Chi Minh City</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-slate-900 mb-4">Medical Information</h4>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <p class="text-xs font-medium text-blue-600 mb-1">Patient ID</p>
+                                <p class="text-lg font-bold text-blue-900">25070675</p>
+                            </div>
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                <p class="text-xs font-medium text-green-600 mb-1">Record ID</p>
+                                <p class="text-lg font-bold text-green-900">0005199/25</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h5 class="text-base font-semibold text-slate-900 mb-3">Recent Activity</h5>
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-calendar text-blue-600 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-900">Last Visit</p>
+                                        <p class="text-xs text-slate-600">August 26, 2025</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-file-medical text-green-600 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-900">Medical Record Updated</p>
+                                        <p class="text-xs text-slate-600">August 29, 2025</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Notes -->
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <h5 class="text-base font-semibold text-yellow-800 mb-2">Medical Notes</h5>
+                            <p class="text-sm text-yellow-700">Patient requires follow-up examination within the next 2 weeks. Monitor blood pressure and review current medications.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Mode Footer -->
+                <div id="edit-footer" class="hidden mt-6 pt-6 border-t border-slate-200 flex items-center justify-end space-x-3">
+                    <button onclick="toggleEditMode()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium">
+                        Cancel
+                    </button>
+                    <button onclick="savePatientChanges()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center space-x-2">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: PatientModal -->
+
+    <script>
+        // @STATE: currentView:string = 'dashboard'
+        // @STATE: editMode:boolean = false
+        // @STATE: modalOpen:boolean = false
+
+        // View Management
+        function showView(viewName) {
+            // TODO: Implement React Router navigation
+            const views = ['dashboard-view', 'records-view', 'patient-list-view'];
+            views.forEach(view => {
+                document.getElementById(view).classList.add('hidden');
+            });
+            document.getElementById(viewName + '-view').classList.remove('hidden');
+        }
+
+        // Patient Modal Management
+        function openPatientModal(mode, patientId) {
+            // TODO: Fetch patient data from API
+            document.getElementById('patient-modal').classList.remove('hidden');
+            if (mode === 'edit') {
+                toggleEditMode();
+            }
+        }
+
+        function closePatientModal() {
+            document.getElementById('patient-modal').classList.add('hidden');
+            // Reset to view mode
+            setViewMode();
+        }
+
+        function toggleEditMode() {
+            const isEditing = !document.getElementById('edit-name').classList.contains('hidden');
+            
+            if (isEditing) {
+                setViewMode();
+            } else {
+                setEditMode();
+            }
+        }
+
+        function setViewMode() {
+            // Show view elements, hide edit elements
+            const viewElements = ['view-name', 'view-gender', 'view-birth', 'view-phone', 'view-address'];
+            const editElements = ['edit-name', 'edit-gender', 'edit-birth', 'edit-phone', 'edit-address', 'edit-footer'];
+            
+            viewElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
+            editElements.forEach(id => document.getElementById(id).classList.add('hidden'));
+            
+            document.getElementById('edit-btn').classList.remove('hidden');
+            document.getElementById('cancel-btn').classList.add('hidden');
+        }
+
+        function setEditMode() {
+            // Hide view elements, show edit elements
+            const viewElements = ['view-name', 'view-gender', 'view-birth', 'view-phone', 'view-address'];
+            const editElements = ['edit-name', 'edit-gender', 'edit-birth', 'edit-phone', 'edit-address', 'edit-footer'];
+            
+            viewElements.forEach(id => document.getElementById(id).classList.add('hidden'));
+            editElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
+            
+            document.getElementById('edit-btn').classList.add('hidden');
+            document.getElementById('cancel-btn').classList.remove('hidden');
+        }
+
+        function savePatientChanges() {
+            // TODO: Implement API call to save changes
+            console.log('Saving patient changes...');
+            // Simulate save and return to view mode
+            setTimeout(() => {
+                setViewMode();
+                // TODO: Show success notification
+            }, 500);
+        }
+
+        function toggleDepartmentModal() {
+            // TODO: Implement department selection modal
+            console.log('Opening department selection...');
+        }
+
+        // Time update functionality
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            const elements = document.querySelectorAll('[data-bind="currentTime"]');
+            elements.forEach(el => el.textContent = timeString);
+        }
+
+        // Initialize
+        (() => {
+            // Set initial view
+            showView('dashboard');
+            
+            // Update time every second
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Set current date
+            const now = new Date();
+            const monthName = now.toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
+            const elements = document.querySelectorAll('[data-bind="currentDate"]');
+            elements.forEach(el => el.textContent = monthName);
+        })();
+
+        // Close modal when clicking outside
+        document.getElementById('patient-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePatientModal();
+            }
+        });
+    </script>
+</body>
+</html>
