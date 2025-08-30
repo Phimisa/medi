@@ -1,0 +1,1082 @@
+
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bệnh Án Điện Tử - EMR Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.2s ease-in-out',
+                    'slide-in': 'slideIn 0.3s ease-out',
+                    'scale-in': 'scaleIn 0.2s ease-out',
+                }
+            }
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(221.2 83.2% 53.3%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(142.1 76.2% 36.3%);
+            --accent-foreground: hsl(355.7 100% 97.3%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221.2 83.2% 53.3%);
+            --radius: 0.75rem;
+        }
+
+        * {
+            border-color: hsl(var(--border));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 53.3%) 0%, hsl(221.2 83.2% 45%) 100%);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 45%) 0%, hsl(221.2 83.2% 40%) 100%);
+            transform: translateY(-1px);
+        }
+
+        .medical-icon {
+            background: linear-gradient(135deg, hsl(142.1 76.2% 36.3%) 0%, hsl(142.1 76.2% 30%) 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        .status-new { background: hsl(142.1 76.2% 95%); color: hsl(142.1 76.2% 36.3%); }
+        .status-processing { background: hsl(47 96% 95%); color: hsl(47 96% 53%); }
+        .status-completed { background: hsl(221.2 83.2% 95%); color: hsl(221.2 83.2% 53.3%); }
+    </style>
+</head>
+<body class="h-full overflow-hidden">
+    <!-- @COMPONENT: EMRApplication -->
+    <div class="h-full flex bg-gradient-to-br from-slate-50 to-slate-100">
+        
+        <!-- @COMPONENT: Sidebar -->
+        <div class="w-72 bg-white shadow-2xl border-r border-slate-200 flex flex-col">
+            <!-- Sidebar Header -->
+            <div class="p-6 border-b border-slate-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-md text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900">EMR</h3>
+                        <p class="text-sm text-slate-600">Phòng công nghệ thông tin</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-certificate w-5 text-center"></i>
+                    <span class="font-medium">Chứng thư số</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-print w-5 text-center"></i>
+                    <span class="font-medium">In tập tin dữ liệu</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-cog w-5 text-center"></i>
+                    <span class="font-medium">Cài đặt</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:text-blue-600">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                    <span class="font-medium">Đăng xuất</span>
+                </a>
+            </nav>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- @COMPONENT: Header -->
+            <header class="bg-white shadow-lg border-b border-slate-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="lg:hidden p-2 rounded-lg hover:bg-slate-100">
+                            <i class="fas fa-bars text-slate-600"></i>
+                        </button>
+                        
+                        <!-- Department Selector -->
+                        <div class="relative">
+                            <button onclick="toggleDepartmentModal()" class="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 transition-all duration-200">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-hospital-alt text-white text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-700" data-bind="selectedDepartment">Siêu Âm Trăng Đen + Điện Tim</span>
+                                <i class="fas fa-chevron-down text-slate-500 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-lg hover:bg-slate-100">
+                            <i class="fas fa-bell text-slate-600"></i>
+                        </button>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="font-medium text-slate-700">Phòng công nghệ thông tin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: Header -->
+
+            <!-- @COMPONENT: MainContent -->
+            <main class="flex-1 overflow-auto">
+                
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="p-6">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Bảng điều khiển</h1>
+                            <p class="text-slate-600">Quản lý hệ thống bệnh án điện tử</p>
+                        </div>
+                        
+                        <!-- @COMPONENT: DateTimeWidget -->
+                        <div class="glass-morphism rounded-xl p-4 text-center">
+                            <p class="text-sm text-slate-600 mb-1">Chào buổi sáng,</p>
+                            <p class="text-2xl font-bold text-slate-900" data-bind="currentTime">09:26:36</p>
+                            <p class="text-sm text-slate-600 mt-1" data-bind="currentDate">Tháng 8 - 2025</p>
+                            
+                            <!-- Mini Calendar -->
+                            <div class="mt-4 grid grid-cols-7 gap-1 text-xs">
+                                <div class="text-slate-400 p-1">T2</div>
+                                <div class="text-slate-400 p-1">T3</div>
+                                <div class="text-slate-400 p-1">T4</div>
+                                <div class="text-slate-400 p-1">T5</div>
+                                <div class="text-slate-400 p-1">T6</div>
+                                <div class="text-slate-400 p-1">T7</div>
+                                <div class="text-slate-400 p-1">CN</div>
+                                
+                                <!-- Calendar days (static for demo) -->
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">01</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">02</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">03</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">04</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">05</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">06</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">07</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">08</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">09</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">10</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">11</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">12</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">13</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">14</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">15</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">16</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">17</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">18</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">19</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">20</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">21</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">22</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">23</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">24</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">25</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">26</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">27</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">28</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">29</div>
+                                <div class="p-1 bg-blue-600 text-white rounded">30</div>
+                                <div class="p-1 hover:bg-blue-100 rounded cursor-pointer">31</div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: DateTimeWidget -->
+                    </div>
+
+                    <!-- KPI Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 medical-icon rounded-xl flex items-center justify-center mr-4">
+                                    <i class="fas fa-user-injured text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Bệnh nhân hôm nay</p>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="todayPatients">142</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mr-4">
+                                    <i class="fas fa-file-medical text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Bệnh án mới</p>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="newRecords">23</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center mr-4">
+                                    <i class="fas fa-clipboard-list text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Cần xử lý</p>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="pendingRecords">8</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center mr-4">
+                                    <i class="fas fa-chart-line text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Tổng bệnh án</p>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="totalRecords">2,847</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Cards -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Help Center Card -->
+                        <div onclick="showHelpCenter()" class="card-hover bg-white rounded-xl p-8 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Trung tâm trợ giúp</h3>
+                                    <p class="text-slate-600">Hướng dẫn sử dụng và hỗ trợ kỹ thuật</p>
+                                </div>
+                                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-question-circle text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-blue-600 font-medium">
+                                <span>Xem chi tiết</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Medical Records Card -->
+                        <div onclick="showMedicalRecords()" class="card-hover bg-white rounded-xl p-8 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Bệnh án</h3>
+                                    <p class="text-slate-600">Quản lý hồ sơ bệnh án điện tử</p>
+                                </div>
+                                <div class="w-16 h-16 medical-icon rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-file-medical-alt text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-blue-600 font-medium">
+                                <span>Truy cập</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="mt-8 bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">Hoạt động gần đây</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-plus text-green-600 text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-slate-900">Bệnh án mới được tạo</p>
+                                    <p class="text-sm text-slate-600">Nguyễn Văn A - 10 phút trước</p>
+                                </div>
+                                <span class="status-badge status-new">Mới</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-edit text-blue-600 text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-slate-900">Cập nhật kết quả xét nghiệm</p>
+                                    <p class="text-sm text-slate-600">Trần Thị B - 25 phút trước</p>
+                                </div>
+                                <span class="status-badge status-processing">Xử lý</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-purple-600 text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-slate-900">Hoàn thành khám chuyên khoa</p>
+                                    <p class="text-sm text-slate-600">Lê Văn C - 1 giờ trước</p>
+                                </div>
+                                <span class="status-badge status-completed">Hoàn thành</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Records Modules View -->
+                <div id="medical-records-view" class="p-6 hidden">
+                    <!-- Breadcrumb -->
+                    <nav class="flex items-center space-x-2 text-sm text-slate-600 mb-6">
+                        <a href="#" onclick="showDashboard()" class="hover:text-blue-600">Trang chủ</a>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                        <span class="text-slate-900 font-medium">Bệnh án</span>
+                    </nav>
+
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Quản lý bệnh án</h1>
+                            <p class="text-slate-600">Hệ thống quản lý bệnh án điện tử chuyên nghiệp</p>
+                        </div>
+                    </div>
+
+                    <!-- Modules Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Patient List Module -->
+                        <div onclick="showPatientList()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 medical-icon rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="patientCount">245</p>
+                                    <p class="text-xs text-slate-500">Bệnh nhân</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Danh sách người bệnh tại khoa</h3>
+                            <p class="text-sm text-slate-600 mb-4">Quản lý danh sách bệnh nhân trong khoa</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem danh sách</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Vital Signs Module -->
+                        <div onclick="showVitalSigns()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-heartbeat text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="vitalSignsCount">89</p>
+                                    <p class="text-xs text-slate-500">Chỉ số</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Chỉ nhận chức năng sống</h3>
+                            <p class="text-sm text-slate-600 mb-4">Theo dõi các chỉ số sinh tồn</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem chi tiết</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Specialist Examination Module -->
+                        <div onclick="showSpecialistExam()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-stethoscope text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="examCount">156</p>
+                                    <p class="text-xs text-slate-500">Cuộc khám</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Khám chuyên khoa</h3>
+                            <p class="text-sm text-slate-600 mb-4">Quản lý khám bệnh chuyên khoa</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Truy cập</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Digital Records Module -->
+                        <div onclick="showDigitalRecords()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-archive text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="digitalRecordsCount">1,247</p>
+                                    <p class="text-xs text-slate-500">Hồ sơ</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Kho hồ sơ số</h3>
+                            <p class="text-sm text-slate-600 mb-4">Lưu trữ và quản lý hồ sơ điện tử</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Truy cập kho</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Signature Module -->
+                        <div onclick="showSignatureRecords()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-signature text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="signatureCount">67</p>
+                                    <p class="text-xs text-slate-500">Chờ ký</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Hồ sơ trình ký</h3>
+                            <p class="text-sm text-slate-600 mb-4">Quản lý hồ sơ cần phê duyệt</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Xem danh sách</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Discharge Management Module -->
+                        <div onclick="showDischargeManagement()" class="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200 cursor-pointer">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-sign-out-alt text-white"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="dischargeCount">34</p>
+                                    <p class="text-xs text-slate-500">Xuất viện</p>
+                                </div>
+                            </div>
+                            <h3 class="font-semibold text-slate-900 mb-2">Quản lý xuất viện</h3>
+                            <p class="text-sm text-slate-600 mb-4">Xử lý thủ tục xuất viện</p>
+                            <div class="flex items-center text-blue-600 text-sm font-medium">
+                                <span>Quản lý</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient List Detail View -->
+                <div id="patient-list-view" class="p-6 hidden">
+                    <!-- Breadcrumb -->
+                    <nav class="flex items-center space-x-2 text-sm text-slate-600 mb-6">
+                        <a href="#" onclick="showDashboard()" class="hover:text-blue-600">Trang chủ</a>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                        <a href="#" onclick="showMedicalRecords()" class="hover:text-blue-600">Bệnh án</a>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                        <span class="text-slate-900 font-medium">Danh sách người bệnh tại khoa</span>
+                    </nav>
+
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900 mb-2">Danh sách người bệnh tại khoa</h1>
+                            <p class="text-slate-600">Quản lý thông tin bệnh nhân trong khoa</p>
+                        </div>
+                        <button onclick="openPatientModal()" class="btn-primary text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2">
+                            <i class="fas fa-plus"></i>
+                            <span>Thêm bệnh nhân</span>
+                        </button>
+                    </div>
+
+                    <!-- Summary Panel -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-users text-blue-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Tổng cộng</p>
+                                    <p class="text-xl font-bold text-slate-900" data-bind="totalPatients">245</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-user-plus text-green-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Mới hôm nay</p>
+                                    <p class="text-xl font-bold text-slate-900" data-bind="newPatientsToday">12</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-clock text-amber-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Chờ khám</p>
+                                    <p class="text-xl font-bold text-slate-900" data-bind="waitingPatients">8</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-slate-200">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-purple-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Đã khám</p>
+                                    <p class="text-xl font-bold text-slate-900" data-bind="examinedPatients">156</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-white rounded-lg p-4 shadow-sm border border-slate-200 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Tìm kiếm</label>
+                                <input type="text" placeholder="Tên bệnh nhân, BHYT..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Trạng thái</label>
+                                <select class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Tất cả</option>
+                                    <option>Chờ khám</option>
+                                    <option>Đang khám</option>
+                                    <option>Đã khám</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Từ ngày</label>
+                                <input type="date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Đến ngày</label>
+                                <input type="date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Table -->
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Bệnh nhân</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">BHYT</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ngày sinh</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Giới tính</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Trạng thái</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ngày vào</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-slate-200" data-mock="true">
+                                    <!-- @MAP: patients.map(patient => ( -->
+                                    <tr class="hover:bg-slate-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white font-medium text-sm">NV</span>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-slate-900">Nguyễn Văn An</div>
+                                                    <div class="text-sm text-slate-500">ID: #BN001234</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">VN123456789</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">15/03/1985</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Nam</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-processing">Chờ khám</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">30/08/2025</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Xem</button>
+                                            <button class="text-green-600 hover:text-green-900 mr-3">Sửa</button>
+                                            <button class="text-red-600 hover:text-red-900">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 bg-gradient-to-br from-pink-600 to-pink-700 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white font-medium text-sm">TT</span>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-slate-900">Trần Thị Bình</div>
+                                                    <div class="text-sm text-slate-500">ID: #BN001235</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">VN987654321</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">22/07/1978</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Nữ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-completed">Đã khám</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">29/08/2025</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Xem</button>
+                                            <button class="text-green-600 hover:text-green-900 mr-3">Sửa</button>
+                                            <button class="text-red-600 hover:text-red-900">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white font-medium text-sm">LV</span>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-slate-900">Lê Văn Cường</div>
+                                                    <div class="text-sm text-slate-500">ID: #BN001236</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">VN456789123</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">10/12/1992</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Nam</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-new">Mới</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">30/08/2025</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Xem</button>
+                                            <button class="text-green-600 hover:text-green-900 mr-3">Sửa</button>
+                                            <button class="text-red-600 hover:text-red-900">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="bg-white px-4 py-3 border-t border-slate-200 sm:px-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1 flex justify-between sm:hidden">
+                                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50">Trước</a>
+                                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50">Sau</a>
+                                </div>
+                                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-sm text-slate-700">
+                                            Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">10</span> trong <span class="font-medium">245</span> kết quả
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </a>
+                                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-blue-50 text-sm font-medium text-blue-600">1</a>
+                                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50">2</a>
+                                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50">3</a>
+                                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+            <!-- @END_COMPONENT: MainContent -->
+        </div>
+
+        <!-- @COMPONENT: DepartmentModal -->
+        <div id="department-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 animate-scale-in">
+                <div class="p-6 border-b border-slate-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-slate-900">Chọn khoa</h3>
+                        <button onclick="closeDepartmentModal()" class="p-2 hover:bg-slate-100 rounded-lg">
+                            <i class="fas fa-times text-slate-500"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 max-h-96 overflow-y-auto">
+                    <div class="space-y-3">
+                        <button onclick="selectDepartment('Siêu Âm Trăng Đen + Điện Tim')" class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 border border-transparent hover:border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-heartbeat text-blue-600 text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-900">Siêu Âm Trăng Đen + Điện Tim</span>
+                            </div>
+                        </button>
+                        <button onclick="selectDepartment('Khoa Nội Tổng Hợp')" class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 border border-transparent hover:border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-stethoscope text-green-600 text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-900">Khoa Nội Tổng Hợp</span>
+                            </div>
+                        </button>
+                        <button onclick="selectDepartment('Khoa Ngoại Tổng Hợp')" class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 border border-transparent hover:border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-cut text-red-600 text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-900">Khoa Ngoại Tổng Hợp</span>
+                            </div>
+                        </button>
+                        <button onclick="selectDepartment('Khoa Sản Phụ Khoa')" class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 border border-transparent hover:border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-baby text-pink-600 text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-900">Khoa Sản Phụ Khoa</span>
+                            </div>
+                        </button>
+                        <button onclick="selectDepartment('Khoa Nhi')" class="w-full text-left p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 border border-transparent hover:border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-child text-orange-600 text-sm"></i>
+                                </div>
+                                <span class="font-medium text-slate-900">Khoa Nhi</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: DepartmentModal -->
+
+        <!-- @COMPONENT: PatientModal -->
+        <div id="patient-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto animate-scale-in">
+                <div class="p-6 border-b border-slate-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-slate-900">Thêm bệnh nhân mới</h3>
+                        <button onclick="closePatientModal()" class="p-2 hover:bg-slate-100 rounded-lg">
+                            <i class="fas fa-times text-slate-500"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <form class="space-y-6" data-implementation="Should validate form before submission">
+                        <!-- Personal Information Section -->
+                        <div>
+                            <h4 class="text-md font-medium text-slate-900 mb-4">Thông tin cá nhân</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Họ và tên *</label>
+                                    <input type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Nhập họ và tên">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Ngày sinh *</label>
+                                    <input type="date" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Giới tính *</label>
+                                    <select required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="male">Nam</option>
+                                        <option value="female">Nữ</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Số điện thoại</label>
+                                    <input type="tel" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Nhập số điện thoại">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Insurance Information Section -->
+                        <div>
+                            <h4 class="text-md font-medium text-slate-900 mb-4">Thông tin bảo hiểm</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Số thẻ BHYT</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="VN123456789">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Ngày hết hạn</label>
+                                    <input type="date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Address Information Section -->
+                        <div>
+                            <h4 class="text-md font-medium text-slate-900 mb-4">Địa chỉ</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Địa chỉ chi tiết</label>
+                                    <textarea rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Nhập địa chỉ chi tiết"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Tỉnh/Thành phố</label>
+                                    <select class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Chọn tỉnh/thành phố</option>
+                                        <option value="hanoi">Hà Nội</option>
+                                        <option value="hcm">TP. Hồ Chí Minh</option>
+                                        <option value="danang">Đà Nẵng</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Quận/Huyện</label>
+                                    <select class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Chọn quận/huyện</option>
+                                        <option value="district1">Quận 1</option>
+                                        <option value="district3">Quận 3</option>
+                                        <option value="district5">Quận 5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Information Section -->
+                        <div>
+                            <h4 class="text-md font-medium text-slate-900 mb-4">Thông tin y tế</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Lý do vào viện</label>
+                                    <textarea rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Mô tả lý do vào viện"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Tiền sử bệnh</label>
+                                    <textarea rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Tiền sử bệnh án (nếu có)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center justify-end space-x-4 pt-6 border-t border-slate-200">
+                            <button type="button" onclick="closePatientModal()" class="px-6 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 font-medium">
+                                Hủy
+                            </button>
+                            <button type="submit" data-event="click:handleSubmit" class="btn-primary text-white px-6 py-2 rounded-lg font-medium">
+                                Lưu bệnh nhân
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: PatientModal -->
+
+    </div>
+    <!-- @END_COMPONENT: EMRApplication -->
+
+    <script>
+        (function() {
+            // Navigation Functions
+            function showDashboard() {
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('medical-records-view').classList.add('hidden');
+                document.getElementById('patient-list-view').classList.add('hidden');
+            }
+
+            function showMedicalRecords() {
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('medical-records-view').classList.remove('hidden');
+                document.getElementById('patient-list-view').classList.add('hidden');
+            }
+
+            function showPatientList() {
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('medical-records-view').classList.add('hidden');
+                document.getElementById('patient-list-view').classList.remove('hidden');
+            }
+
+            function showHelpCenter() {
+                // TODO: Implement help center functionality
+                console.log('Help center clicked');
+            }
+
+            function showVitalSigns() {
+                // TODO: Implement vital signs module
+                console.log('Vital signs module clicked');
+            }
+
+            function showSpecialistExam() {
+                // TODO: Implement specialist examination module
+                console.log('Specialist exam module clicked');
+            }
+
+            function showDigitalRecords() {
+                // TODO: Implement digital records module
+                console.log('Digital records module clicked');
+            }
+
+            function showSignatureRecords() {
+                // TODO: Implement signature records module
+                console.log('Signature records module clicked');
+            }
+
+            function showDischargeManagement() {
+                // TODO: Implement discharge management module
+                console.log('Discharge management module clicked');
+            }
+
+            // Modal Functions
+            function toggleDepartmentModal() {
+                const modal = document.getElementById('department-modal');
+                modal.classList.toggle('hidden');
+            }
+
+            function closeDepartmentModal() {
+                document.getElementById('department-modal').classList.add('hidden');
+            }
+
+            function selectDepartment(departmentName) {
+                const selectedElement = document.querySelector('[data-bind="selectedDepartment"]');
+                selectedElement.textContent = departmentName;
+                closeDepartmentModal();
+            }
+
+            function openPatientModal() {
+                document.getElementById('patient-modal').classList.remove('hidden');
+            }
+
+            function closePatientModal() {
+                document.getElementById('patient-modal').classList.add('hidden');
+            }
+
+            // Real-time clock update
+            function updateDateTime() {
+                const now = new Date();
+                const timeElement = document.querySelector('[data-bind="currentTime"]');
+                const dateElement = document.querySelector('[data-bind="currentDate"]');
+                
+                if (timeElement) {
+                    timeElement.textContent = now.toLocaleTimeString('vi-VN');
+                }
+                
+                if (dateElement) {
+                    const options = { month: 'long', year: 'numeric' };
+                    dateElement.textContent = now.toLocaleDateString('vi-VN', options);
+                }
+            }
+
+            // Initialize
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+
+            // Make functions globally available
+            window.showDashboard = showDashboard;
+            window.showMedicalRecords = showMedicalRecords;
+            window.showPatientList = showPatientList;
+            window.showHelpCenter = showHelpCenter;
+            window.showVitalSigns = showVitalSigns;
+            window.showSpecialistExam = showSpecialistExam;
+            window.showDigitalRecords = showDigitalRecords;
+            window.showSignatureRecords = showSignatureRecords;
+            window.showDischargeManagement = showDischargeManagement;
+            window.toggleDepartmentModal = toggleDepartmentModal;
+            window.closeDepartmentModal = closeDepartmentModal;
+            window.selectDepartment = selectDepartment;
+            window.openPatientModal = openPatientModal;
+            window.closePatientModal = closePatientModal;
+        })();
+    </script>
+</body>
+</html>
