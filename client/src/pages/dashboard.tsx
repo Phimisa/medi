@@ -17,7 +17,7 @@ const recentActivities = [
   },
   {
     id: 2,
-    initials: "TB", 
+    initials: "TB",
     bgColor: "bg-purple-100",
     textColor: "text-purple-600",
     title: "Cập nhật kết quả nghiệm",
@@ -28,7 +28,7 @@ const recentActivities = [
   {
     id: 3,
     initials: "LC",
-    bgColor: "bg-green-100", 
+    bgColor: "bg-green-100",
     textColor: "text-green-600",
     title: "Hoàn thành chuyển khoa",
     subtitle: "Lê Văn Cường • Mã BN: VN06918923",
@@ -45,7 +45,7 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Bảng điều khiển</h1>
           <p className="text-slate-600">Quản lý hệ thống bệnh án điện tử</p>
         </div>
-        
+
         <CalendarWidget />
       </div>
 
@@ -93,22 +93,27 @@ export default function Dashboard() {
       </div>
 
       {/* Action Cards */}
+
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200" data-testid="help-center-card">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-              <HelpCircle className="text-white" size={24} />
+        <Link to="/v2" className="block">
+          <div className="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200" data-testid="help-center-card">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                <HelpCircle className="text-white" size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900">Trung tâm trợ giúp</h3>
+                <p className="text-sm text-slate-600">Hướng dẫn sử dụng và hỗ trợ kỹ thuật</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900">Trung tâm trợ giúp</h3>
-              <p className="text-sm text-slate-600">Hướng dẫn sử dụng và hỗ trợ kỹ thuật</p>
-            </div>
+            <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-2" data-testid="view-help-center">
+              <span>Xem chi tiết</span>
+              <ArrowRight size={16} />
+            </button>
           </div>
-          <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-2" data-testid="view-help-center">
-            <span>Xem chi tiết</span>
-            <ArrowRight size={16} />
-          </button>
-        </div>
+        </Link>
+
 
         {/* Thay đổi Link từ wouter sang react-router-dom */}
         {/* Prop "href" được đổi thành "to" */}
@@ -134,10 +139,10 @@ export default function Dashboard() {
       {/* Recent Activities */}
       <div className="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200" data-testid="recent-activities">
         <h3 className="text-lg font-semibold text-slate-900 mb-6">Hoạt động gần đây</h3>
-        
+
         <div className="space-y-4">
           {recentActivities.map((activity) => (
-            <div 
+            <div
               key={activity.id}
               className="flex items-center space-x-4 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
               data-testid={`activity-item-${activity.id}`}
