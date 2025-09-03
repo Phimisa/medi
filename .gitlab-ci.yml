@@ -1,0 +1,13 @@
+stages:
+  - build
+
+build-job:
+  stage: build
+  image: electronuserland/builder:24-wine # Hoặc phiên bản khác phù hợp
+  script:
+    - npm install
+    - npm run electron:build -- --publish always
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
