@@ -3,8 +3,9 @@ stages:
 
 build-job:
   stage: build
-  image: electronuserland/builder:24-wine # Hoặc phiên bản khác phù hợp
+  image: node:18 # Hoặc phiên bản Node.js khác bạn đang dùng
   script:
+    - npm install --global electron-builder # Cài đặt electron-builder
     - npm install
     - npm run electron:build -- --publish always
   artifacts:
