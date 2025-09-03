@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "wouter";
+// Change the import from "wouter" to "react-router-dom"
+import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Plus, UserCheck, Bed, Ambulance, LogOut, Search, ChevronRight
+  ArrowLeft, Plus, UserCheck, Bed, Ambulance, LogOut, Search, ChevronRight, Eye, Edit, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,11 +102,13 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
     <div className="p-6">
       <div className="mb-6">
         <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-          <Link href="/" className="hover:text-blue-600" data-testid="breadcrumb-home">
+          {/* Change "href" to "to" */}
+          <Link to="/" className="hover:text-blue-600" data-testid="breadcrumb-home">
             Trang chủ
           </Link>
           <ChevronRight size={14} />
-          <Link href="/patient-management" className="hover:text-blue-600" data-testid="breadcrumb-medical">
+          {/* Change "href" to "to" */}
+          <Link to="/patient-management" className="hover:text-blue-600" data-testid="breadcrumb-medical">
             Bệnh án
           </Link>
           <ChevronRight size={14} />
@@ -116,11 +119,11 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
 
         <div className="flex items-center justify-between">
           <div>
-
-
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">              Danh sách người bệnh tại khoa
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              Danh sách người bệnh tại khoa
             </h1>
-            <p className="text-slate-600">              Quản lý bệnh nhân đang điều trị
+            <p className="text-slate-600">
+              Quản lý bệnh nhân đang điều trị
             </p>
           </div>
           <Button
@@ -133,7 +136,6 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
           </Button>
         </div>
       </div>
-
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -204,7 +206,8 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-200">
-              <tr>
+              <tr
+              >
                 <th className="text-left p-4 font-semibold text-slate-900">BỆNH NHÂN</th>
                 <th className="text-left p-4 font-semibold text-slate-900">BHYT</th>
                 <th className="text-left p-4 font-semibold text-slate-900">NGÀY SINH</th>
@@ -217,6 +220,7 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
             <tbody>
               {patients.map((patient) => (
                 <tr
+                 onClick={() => onViewPatient(patient.id)}
                   key={patient.id}
                   className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
                   data-testid={`patient-row-${patient.id}`}
@@ -243,25 +247,29 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
                   <td className="p-4 text-slate-600">{patient.admissionDate}</td>
                   <td className="p-4">
                     <div className="flex items-center space-x-2">
+                      {/* Nút Xem (View) */}
                       <button
                         onClick={() => onViewPatient(patient.id)}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        className="p-2 rounded-full text-blue-600 hover:bg-blue-100 transition-colors"
                         data-testid={`view-patient-${patient.id}`}
+                        title="Xem chi tiết"
                       >
-                        Xem
+                        <Eye size={18} />
                       </button>
                       <button
                         onClick={() => onEditPatient(patient.id)}
-                        className="text-green-600 hover:text-green-700 text-sm font-medium"
+                        className="p-2 rounded-full text-green-600 hover:bg-green-100 transition-colors"
                         data-testid={`edit-patient-${patient.id}`}
+                        title="Sửa thông tin"
                       >
-                        Sửa
+                        <Edit size={18} />
                       </button>
                       <button
-                        className="text-red-600 hover:text-red-700 text-sm font-medium"
+                        className="p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors"
                         data-testid={`delete-patient-${patient.id}`}
+                        title="Xóa bệnh nhân"
                       >
-                        Xóa
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </td>

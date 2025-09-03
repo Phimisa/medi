@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { ArrowLeft, List, Heart, Stethoscope, Archive, Edit, LogOut, ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +22,9 @@ const managementModules = [
     icon: Heart,
     iconColor: "bg-gradient-to-br from-red-500 to-red-600",
     buttonText: "Xem chi tiết",
-    buttonColor: "text-red-600 hover:text-red-700"
+    buttonColor: "text-red-600 hover:text-red-700",
+    href: "/v2"
+
   },
   {
     id: "specialist-exam",
@@ -32,7 +34,9 @@ const managementModules = [
     icon: Stethoscope,
     iconColor: "bg-gradient-to-br from-blue-500 to-blue-600",
     buttonText: "Truy cập",
-    buttonColor: "text-blue-600 hover:text-blue-700"
+    buttonColor: "text-blue-600 hover:text-blue-700",
+    href: "/v2"
+
   },
   {
     id: "digital-archive",
@@ -42,7 +46,9 @@ const managementModules = [
     icon: Archive,
     iconColor: "bg-gradient-to-br from-purple-500 to-purple-600",
     buttonText: "Truy cập kho",
-    buttonColor: "text-purple-600 hover:text-purple-700"
+    buttonColor: "text-purple-600 hover:text-purple-700",
+    href: "/v2"
+
   },
   {
     id: "medical-records",
@@ -52,7 +58,10 @@ const managementModules = [
     icon: Edit,
     iconColor: "bg-gradient-to-br from-orange-500 to-orange-600",
     buttonText: "Xem danh sách",
-    buttonColor: "text-orange-600 hover:text-orange-700"
+    buttonColor: "text-orange-600 hover:text-orange-700",
+    href: "/pdf",
+
+
   },
   {
     id: "discharge-management",
@@ -62,21 +71,24 @@ const managementModules = [
     icon: LogOut,
     iconColor: "bg-gradient-to-br from-teal-500 to-teal-600",
     buttonText: "Quản lý",
-    buttonColor: "text-teal-600 hover:text-teal-700"
+    buttonColor: "text-teal-600 hover:text-teal-700",
+    href: "/v2"
+
   }
 ];
 
 export default function PatientManagement() {
   return (
     <div className="p-6">
-
       <div className="mb-6">
         <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-          <Link href="/" className="hover:text-blue-600" data-testid="breadcrumb-home">
+          {/* Thay đổi Link từ wouter sang react-router-dom, đổi prop "href" thành "to" */}
+          <Link to="/" className="hover:text-blue-600" data-testid="breadcrumb-home">
             Trang chủ
           </Link>
           <ChevronRight size={14} />
-          <Link href="/patient-management" className="hover:text-blue-600" data-testid="breadcrumb-current">
+          {/* Thay đổi Link từ wouter sang react-router-dom, đổi prop "href" thành "to" */}
+          <Link to="/patient-management" className="hover:text-blue-600" data-testid="breadcrumb-current">
             Bệnh án
           </Link>
         </div>
@@ -86,10 +98,8 @@ export default function PatientManagement() {
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Quản lý bệnh án</h1>
             <p className="text-slate-600">Hệ thống quản lý bệnh án điện tử chuyên nghiệp</p>
           </div>
-
         </div>
       </div>
-
 
       {/* Management Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -113,8 +123,9 @@ export default function PatientManagement() {
           );
 
           if (module.href) {
+            // Sử dụng Link của react-router-dom với prop "to"
             return (
-              <Link key={module.id} href={module.href}>
+              <Link key={module.id} to={module.href}>
                 {content}
               </Link>
             );

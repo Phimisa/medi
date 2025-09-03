@@ -1,23 +1,28 @@
-import { Link, useLocation } from "wouter";
-import { 
-  Home, 
-  Tag, 
-  Printer, 
-  Settings, 
+// Thay đổi import từ "wouter" sang "react-router-dom"
+import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  Tag,
+  Printer,
+  Settings,
   LogOut,
-  UserRound
+  UserRound,
+  FileText,
+  Users
 } from "lucide-react";
 
 export default function Sidebar() {
-  const [location] = useLocation();
+  // sử dụng hook useLocation từ react-router-dom
+  const location = useLocation();
 
-  const menuItems = [
-    { href: "/", label: "Trang chủ", icon: Home },
-    { href: "/certificates", label: "Chứng thư số", icon: Tag },
-    { href: "/print", label: "In tập tin dữ liệu", icon: Printer },
-    { href: "/settings", label: "Cài đặt", icon: Settings },
-    { href: "/logout", label: "Đăng xuất", icon: LogOut },
-  ];
+const menuItems = [
+  { href: "/", label: "Trang chủ", icon: Home },
+  { href: "/patient-management", label: "Bệnh án", icon: FileText },
+  { href: "/patient-list", label: "Danh sách bệnh nhân", icon: Users },
+  { href: "/pdf", label: "In tập tin dữ liệu", icon: Printer },
+  { href: "/settings", label: "Cài đặt", icon: Settings },
+  { href: "/logout", label: "Đăng xuất", icon: LogOut },
+];
 
   return (
     <div className="w-72 bg-white shadow-2xl border-r border-slate-200 flex flex-col">
@@ -37,18 +42,19 @@ export default function Sidebar() {
       {/* Navigation Menu */}
       <nav className="flex-1 p-4 space-y-2">
         {menuItems.map((item) => {
-          const isActive = location === item.href;
+          // So sánh pathname của location với href của item
+          const isActive = location.pathname === item.href;
           const Icon = item.icon;
-          
+
           return (
+            // Thay thế prop "href" bằng "to"
             <Link
               key={item.href}
-              href={item.href}
-              className={`sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                isActive
+              to={item.href}
+              className={`sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${isActive
                   ? "text-blue-600 bg-blue-50"
                   : "text-slate-700 hover:text-blue-600"
-              }`}
+                }`}
               data-testid={`sidebar-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <Icon size={20} />

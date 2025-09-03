@@ -1,21 +1,39 @@
 import { useState } from "react";
-import { Bell, ChevronDown, Menu, User, HospitalIcon } from "lucide-react";
+import { Bell, ChevronDown, Menu, X, User, HospitalIcon , PanelLeftClose} from "lucide-react";
 import NotificationDropdown from "@/components/dropdowns/notification-dropdown";
 
 interface HeaderProps {
   selectedDepartment: string;
   onDepartmentClick: () => void;
+  // Prop mới để xử lý việc đóng/mở sidebar
+  onSidebarToggle: () => void;
+  isSidebarOpen: boolean;
 }
 
-export default function Header({ selectedDepartment, onDepartmentClick }: HeaderProps) {
+export default function Header({ 
+  selectedDepartment, 
+  onDepartmentClick, 
+  onSidebarToggle, 
+  isSidebarOpen 
+}: HeaderProps) {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   return (
     <header className="bg-white shadow-lg border-b border-slate-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <button className="lg:hidden p-2 rounded-lg hover:bg-slate-100" data-testid="mobile-menu-button">
-            <Menu className="text-slate-600" size={20} />
+          {/* Sidebar Toggle Button (Desktop & Mobile) */}
+          <button 
+            onClick={onSidebarToggle} 
+            className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            data-testid="sidebar-toggle-button"
+            aria-label="Toggle Sidebar"
+          >
+            {isSidebarOpen ? (
+              <PanelLeftClose className="text-slate-600" size={20} /> // Thay đổi icon khi sidebar mở
+            ) : (
+              <Menu className="text-slate-600" size={20} />
+            )}
           </button>
           
           {/* Department Selector */}

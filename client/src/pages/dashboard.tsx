@@ -1,4 +1,5 @@
-import { Link } from "wouter";
+// Thay đổi import từ "wouter" sang "react-router-dom"
+import { Link } from "react-router-dom";
 import { UserCheck, Calendar, Ambulance, Users, HelpCircle, FileText, ArrowRight } from "lucide-react";
 import CalendarWidget from "@/components/widgets/calendar-widget";
 import StatsCard from "@/components/cards/stats-card";
@@ -109,7 +110,9 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <Link href="/patient-management" className="block">
+        {/* Thay đổi Link từ wouter sang react-router-dom */}
+        {/* Prop "href" được đổi thành "to" */}
+        <Link to="/patient-management" className="block">
           <div className="card-hover bg-white rounded-xl p-6 shadow-lg border border-slate-200" data-testid="patient-records-card">
             <div className="flex items-center space-x-4 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
