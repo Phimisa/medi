@@ -3,12 +3,17 @@ stages:
 
 build-job:
   stage: build
-  image: node:18 # Hoặc phiên bản Node.js khác bạn đang dùng
+  image: node:18
   script:
-    - npm install --global electron-builder # Cài đặt electron-builder
+    - apt-get update
+    - apt-get install -y snapcraft # Cài đặt snapcraft
+    - npm install --global electron-builder
     - npm install
     - npm run electron:build -- --publish always
   artifacts:
     paths:
       - dist/
     expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "v1"'
+      when: always
