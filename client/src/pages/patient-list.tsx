@@ -254,7 +254,9 @@ export default function PatientList({ onViewPatient, onEditPatient }: PatientLis
                         data-testid={`view-patient-${patient.id}`}
                         title="Xem chi tiết"
                       >
+                        <Link to={`/patient/${patient.id}`} className="text-blue-600 hover:underline">
                         <Eye size={18} />
+                        </Link>
                       </button>
                       <button
                         onClick={() => onEditPatient(patient.id)}

@@ -18,6 +18,7 @@ import PatientDetailsModal from "@/components/modals/patient-details-modal";
 import NotFound from "@/pages/not-found";
 import PDFFormPage from "@/pages/pdf";
 import SettingsPage from "@/pages/setting";
+import PatientDetail from "@/pages/patient-detail";
 
 
 
@@ -74,6 +75,7 @@ function AppRoutes() {
                 />
               }
             />
+            <Route path="/patient/:patientId" element={<PatientDetail />} />
             {/* Sử dụng path="*" để bắt tất cả các đường dẫn không khớp */}
             <Route path="*" element={<NotFound />} />
           </Routes>
